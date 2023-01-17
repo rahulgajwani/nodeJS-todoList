@@ -3,6 +3,8 @@ const router = express.Router();
 const todoList = require("../data.json");
 const fs = require("fs");
 
+//Class or function, mongoDB, Git
+
 router.get("/:id", (req, res) => {
     const todoItem = todoList.find((t) => t.id === req.params.id);
     if (!todoItem)
