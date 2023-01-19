@@ -3,11 +3,12 @@ const router = express.Router();
 const todoList = require("../data.json");
 const fs = require("fs");
 
-// Git, mongoDB, class or function
-
+const findtodoItem = (id) => {
+    return todoList.find((t) => t.id === id);
+}
 
 router.get("/:id", (req, res) => {
-    const todoItem = todoList.find((t) => t.id === req.params.id);
+    const todoItem = findtodoItem(req.params.id);
     if (!todoItem)
         return res
             .status(404)
@@ -16,7 +17,7 @@ router.get("/:id", (req, res) => {
 });
 
 router.patch("/:id", (req, res) => {
-    const todoItem = todoList.find((t) => t.id === req.params.id);
+    const todoItem = findtodoItem(req.params.id);
     if (todoItem) {
         let index = todoList.indexOf(todoItem);
         Object.assign(todoItem, req.body);
@@ -34,7 +35,7 @@ router.patch("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-    const todoItem = todoList.find((t) => t.id === req.params.id);
+    const todoItem = findtodoItem(req.params.id);
     if (todoItem) {
         const index = todoList.indexOf(todoItem);
         todoList.splice(index, 1);
