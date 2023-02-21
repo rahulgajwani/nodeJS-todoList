@@ -1,14 +1,34 @@
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const app = express()
+const todoList = require('./Routes/todoList')
+const todoListId = require('./Routes/todoListId')
+const login = require('./Routes/login')
+const getToken = require('./Routes/getToken')
 
-const todoListRoute = require('./Routes/todoList');
-const todoListId = require('./Routes/todoListId');
+require('dotenv').config()
+const auth = require("./middleware/auth");
 
-app.use('/todoList', todoListRoute);
-app.use('/todoList', todoListId);
+app.use(express.json());
 
-app.get("/", (req, res) => {
-	res.send("Welcome to the TO-DO Home Page");
-});
+mongoose.connect("mongodb+srv://rahul:test123@cluster0.sr69h9x.mongodb.net/todoList?retryWrites=true&w=majority", {
+	useNewUrlParser: true, useUnifiedTopology: true
+}, (err) => {
+	if (err)
+		console.log(err)
+	else
+		console.log('successfully connected')
+})
 
-app.listen(3000, () => console.log("Listening on port 3000..."));
+app.use('/todo',todoList);
+app.use('/todo',todoListId);
+app.use('/login',auth,login)
+app.use('/getToken',getToken)
+
+
+app.listen(3000, () => {
+	console.log('on port 3000')
+})
+
+// password shouldn't be shown, JWT, git Update
