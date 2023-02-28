@@ -10,6 +10,9 @@ const dataSchema = new Schema({
   },
   username: { 
     type: String
+  },
+  token: { 
+    type: String 
   }
 }, { versionKey: false });
 

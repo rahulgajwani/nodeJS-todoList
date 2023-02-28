@@ -6,6 +6,9 @@ router.use(express.json());
 
 router.patch('/:id', (req, res) => {
 	var findId = { _id: req.params.id };
+	if(req.params.id != req.user.user_id){
+		return res.status(400).send("Access denied!");
+	}
 	Data.updateOne(findId, req.body)
 		.then(result => {
 			if (!result) { return res.status(404); }
@@ -15,6 +18,9 @@ router.patch('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+	if(req.params.id != req.user.user_id){
+		return res.status(400).send("Access denied!");
+	}
 	Data.findByIdAndRemove(req.params.id)
 		.then(result => {
 			if (!result) { return res.status(404); }

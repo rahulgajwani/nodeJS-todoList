@@ -4,6 +4,7 @@ const Data = require('../model/todoModel');
 const DataView = require('../model/todoView');
 const bcrypt = require('bcrypt')
 require('dotenv').config()
+const jwt = require("jsonwebtoken");
 
 router.use(express.json());
 
@@ -15,6 +16,14 @@ router.post("/", async (req, res) => {
 		}
 		const user = await Data.findOne({ username });
 		if (user && (await bcrypt.compare(password, user.password))) {
+			const token = jwt.sign(
+				{ user_id: user._id, username },
+				process.env.TOKEN_KEY,
+				{
+					expiresIn: "5h",
+				}
+			);
+			user.token = token;
 			const userView = new DataView(user);
 			return res.status(200).json(userView);
 		}

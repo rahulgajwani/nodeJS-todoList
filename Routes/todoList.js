@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 router.use(express.json());
 
 router.get('/', (req, res) => {
-	Data.find()
+	Data.findById(req.user.user_id)
 		.then(result => {
 			res.send(result);
 		})
@@ -17,15 +17,15 @@ router.get('/', (req, res) => {
 
 router.post("/", async (req, res) => {
 	try {
-		const { title, content, username, password } = req.body;
-		if (!(title && content && username && password)) {
+		const { title, content, password } = req.body;
+		if (!(title && content && password)) {
 			res.status(400).send("All input is required");
 		}
 		const encryptedUserPassword = await bcrypt.hash(password, 10);
 		const user = await Data.create({
 			title: title,
 			content: content,
-			username: username,
+			username: req.user.username,
 			password: encryptedUserPassword,
 		});
 		res.status(201).json(user);
