@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt')
 router.use(express.json());
 
 router.get('/', (req, res) => {
-	Data.findById(req.user.user_id)
+	// Data.findById(req.user.user_id)
+	Data.find({'username': new RegExp(req.user.username, "i")})
 		.then(result => {
 			res.send(result);
 		})
