@@ -17,18 +17,18 @@ router.post("/", async (req, res) => {
 		}
 		const userLogin = await User.findOne({ username });
 		if (userLogin.username == username && (await bcrypt.compare(password, userLogin.password))) {
-			const user = await Data.findOne({ username });
-			if (user) {
+			// const user = await User.findOne({ username });
+			if (userLogin) {
 				const token = jwt.sign(
-					{ user_id: user._id, username },
+					{ user_id: userLogin._id, username },
 					process.env.TOKEN_KEY,
 					{
 						expiresIn: "5h",
 					}
 				);
-				user.token = token;
-				const userView = new DataView(user);
-				return res.status(200).json(userView);
+				userLogin.token = token;
+				const userView = {username, id:userLogin._id, token};
+				return res.status(200).json(userView);// username token and id to be the res
 			}
 
 		}
