@@ -18,8 +18,9 @@ router.patch('/:id', async (req, res, next) => {
 		.catch(err => next(err));
 });
 
-router.delete('/:id', (req, res) => {
-	if (req.params.id != req.user.user_id) {
+router.delete('/:id', async (req, res, next) => {
+	const todoItem = await Data.findOne({ _id: req.params.id, username: req.user.username })
+	if (!todoItem) {
 		return res.status(400).send("Access denied!");
 	}
 	Data.findByIdAndRemove(req.params.id)

@@ -6,7 +6,6 @@ const todoList = require('./Routes/todoList')
 const todoListId = require('./Routes/todoListId')
 const login = require('./Routes/login')
 
-
 require('dotenv').config()
 const auth = require("./middleware/auth");
 
@@ -28,5 +27,8 @@ app.use('/login',login)
 
 app.listen(3000, () => {
 	console.log('on port 3000')
+	
 })
+
+
 
